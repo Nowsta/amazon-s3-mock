@@ -6,11 +6,23 @@ require 'uri'
 require 'dotenv'
 Dotenv.load
 
-put '/*' do
-  content_type :json
-  {url: 'http://localhost:9000/test.pdf'}.to_json
-end
+HEADERS = {
+  'Access-Control-Allow-Origin'  => ['*'],
+  'Access-Control-Allow-Methods' => 'POST, PUT, OPTIONS',
+  'Access-Control-Allow-Headers' => 'Content-Type,x-amz-acl',
+  'Content-Type'                 => 'application/json',
+}
 
 get '/*' do
   'from fake amazon s3'
+end
+
+put '/*' do
+  json = {url: 'http://localhost:4567/test.pdf'}.to_json
+  [200, HEADERS, json]
+end
+
+options '/*' do
+  json = {url: 'http://localhost:4567/test.pdf'}.to_json
+  [200, HEADERS, json]
 end
